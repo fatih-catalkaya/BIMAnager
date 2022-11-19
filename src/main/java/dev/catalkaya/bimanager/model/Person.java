@@ -49,7 +49,7 @@ public class Person {
         @JsonProperty("person_room_name")
         private String personRoomName;
         @JsonProperty("person_is_administrator")
-        private boolean personIsAdministrator;
+        private boolean personIsAdministrator = false;
 
         public Builder withPersonId(@JsonAlias("person_id") String personId){
             this.personId = personId;

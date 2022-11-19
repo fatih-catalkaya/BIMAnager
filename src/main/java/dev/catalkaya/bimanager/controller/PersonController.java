@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.List;
 
 public class PersonController {
     private static final Logger logger = LoggerFactory.getLogger(RoomController.class);
@@ -40,7 +41,45 @@ public class PersonController {
 
 
     public static void query(Context context){
+        try{
+            ObjectMapper obm = JacksonMapper.getInstance().getObjectMapper();
+            Person input = obm.readValue(context.body(), Person.class);
+            List<Person> personList = PersonRepository.query(input);
+            if(personList.size() == 1){
+                context.status(200).result(obm.writeValueAsString(personList.get(0)));
+            }
+            else{
+                context.status(200).result(obm.writeValueAsString(personList));
+            }
+        } catch (JsonProcessingException e) {
+            logJsonProcessingException(e, context.body());
+            context.status(HttpStatus.BAD_REQUEST).result("Bad Request");
+        }
+        catch (SQLException e){
+            logSQLException(e);
+            context.status(HttpStatus.BAD_REQUEST).result("Bad Request");
+        }
+    }
 
+
+    public static void update(Context context){
+        try{
+            ObjectMapper obm = JacksonMapper.getInstance().getObjectMapper();
+            Person input = obm.readValue(context.body(), Person.class);
+            PersonRepository.update(input);
+            context.status(HttpStatus.OK).result("");
+        } catch (JsonProcessingException e) {
+            logJsonProcessingException(e, context.body());
+            context.status(HttpStatus.BAD_REQUEST).result("Bad Request");
+        } catch (SQLException e){
+            logSQLException(e);
+            context.status(HttpStatus.BAD_REQUEST).result("Bad Request");
+        }
+        catch (NoSuchAlgorithmException e){
+            logger.error("Could not hash user password!");
+            logger.error(e.getMessage());
+            context.status(HttpStatus.INTERNAL_SERVER_ERROR).result("Internal server error");
+        }
     }
 
 
