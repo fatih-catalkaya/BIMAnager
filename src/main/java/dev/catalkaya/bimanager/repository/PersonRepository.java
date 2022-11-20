@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PersonRepository {
 
@@ -67,6 +66,10 @@ public class PersonRepository {
                     .build();
             resultList.add(p);
         }
+
+        rs.close();
+        ps.close();
+
         return resultList;
     }
 

@@ -1,6 +1,7 @@
 package dev.catalkaya.bimanager;
 
 import dev.catalkaya.bimanager.controller.PersonController;
+import dev.catalkaya.bimanager.controller.ProductController;
 import dev.catalkaya.bimanager.controller.RoomController;
 import io.javalin.Javalin;
 
@@ -14,6 +15,10 @@ public class Main {
                 .get("/person/query", PersonController::query)
                 .post("/person/update", PersonController::update)
                 .delete("/person/delete", PersonController::delete)
+                .put("/product/create", ProductController::create)
+                .get("/product/query", ProductController::query)
+                .post("/product/update", ProductController::update)
+                .delete("/product/delete", ProductController::delete)
             .start(8080);
     }
 }
