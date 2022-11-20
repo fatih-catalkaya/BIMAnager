@@ -101,4 +101,28 @@ public class ProductRepository {
         ps.executeUpdate();
         con.close();
     }
+
+    public static Optional<Product> getProductById(final String productId) throws SQLException {
+        Connection con = Database.getInstance().getConnection();
+        PreparedStatement ps = con.prepareStatement("SELECT * FROM product WHERE product_id = ?");
+        ps.setString(1, productId);
+
+        ResultSet rs = ps.executeQuery();
+        Optional<Product> result;
+        if(rs.next()){
+            result = Optional.of(new Product(
+                    rs.getString("product_id"),
+                    rs.getString("product_name"),
+                    rs.getDouble("product_price")
+            ));
+        }
+        else {
+            result = Optional.empty();
+        }
+
+        rs.close();
+        ps.close();
+        con.close();
+        return result;
+    }
 }

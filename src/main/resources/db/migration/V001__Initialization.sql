@@ -23,19 +23,21 @@ CREATE TABLE product (
 
 CREATE TABLE purchase (
     purchase_id TEXT,
+    person_id TEXT,
     purchase_datetime TEXT NOT NULL,
     purchase_product_name TEXT NOT NULL,
     purchase_product_price REAL NOT NULL,
-    purchase_product_amount INT NOT NULL,
-    PRIMARY KEY (purchase_id)
+    purchase_amount INT NOT NULL,
+    PRIMARY KEY (purchase_id, person_id)
 );
 
 CREATE TABLE deposit (
     deposit_id TEXT,
+    person_id TEXT,
     deposit_datetime TEXT NOT NULL,
     deposit_amount REAL NOT NULL,
     deposit_method TEXT,
-    PRIMARY KEY (deposit_id)
+    PRIMARY KEY (deposit_id, person_id)
 );
 
 CREATE TABLE session (
