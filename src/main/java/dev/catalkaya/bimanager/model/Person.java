@@ -26,7 +26,7 @@ public class Person {
     @JsonProperty("person_is_administrator")
     private boolean personIsAdministrator;
 
-    private Person(String personId, String personName, String personEmail,
+    public Person(String personId, String personName, String personEmail,
                    String personPassword, String personRoomName, boolean personIsAdministrator) {
         this.personId = personId;
         this.personName = personName;
