@@ -1,0 +1,15 @@
+/room/create;PUT
+/room/query;GET
+/room/delete;DELETE
+/person/create;PUT
+/person/query;GET
+/person/update;POST
+/person/delete;DELETE
+/product/create;PUT
+/product/update;POST
+/product/delete;DELETE
+/purchase/create;PUT
+/purchase/query;GET
+/purchase/delete;DELETE
+/deposit/create;PUT
+/deposit/delete;DELETE

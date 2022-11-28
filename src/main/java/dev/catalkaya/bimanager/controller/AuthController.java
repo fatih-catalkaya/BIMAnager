@@ -49,9 +49,14 @@ public class AuthController {
 
     public static void logout(Context context) {
         try{
-            AuthRepository.deleteSessionId(context.req().getSession().getId());
-            context.req().changeSessionId();
-            context.status(HttpStatus.OK).result("OK");
+            final String authToken = context.req().getHeader("X-Auth-Token");
+            if(authToken != null){
+                AuthRepository.deleteSessionId(authToken);
+                context.status(HttpStatus.OK).result("OK");
+            }
+            else{
+                context.status(HttpStatus.BAD_REQUEST).result("Bad Request");
+            }
         }
         catch (SQLException e){
             logSQLException(e);

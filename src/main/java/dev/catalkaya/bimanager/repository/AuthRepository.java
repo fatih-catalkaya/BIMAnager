@@ -4,7 +4,6 @@ import dev.catalkaya.bimanager.Database;
 import dev.catalkaya.bimanager.Utils;
 import dev.catalkaya.bimanager.model.Person;
 
-import javax.xml.crypto.Data;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,14 +46,14 @@ public class AuthRepository {
     public static boolean isValid(Person person) throws SQLException, NoSuchAlgorithmException {
         Connection con = Database.getInstance().getConnection();
         PreparedStatement ps = con.prepareStatement(
-                "SELECT COUNT(person_id) FROM person WHERE person_email = ? AND person_password = ?"
+                "SELECT COUNT(person_id) AS num_rows FROM person WHERE person_email = ? AND person_password = ?"
         );
         ps.setString(1, person.getPersonEmail());
         ps.setString(2, Utils.hashSHA3(person.getPersonPassword()));
 
         ResultSet rs = ps.executeQuery();
         rs.next();
-        int count = rs.getInt(0);
+        int count = rs.getInt("num_rows");
 
         rs.close();
         ps.close();

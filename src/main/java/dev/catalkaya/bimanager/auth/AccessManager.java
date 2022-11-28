@@ -13,7 +13,16 @@ import java.util.Set;
 public class AccessManager implements io.javalin.security.AccessManager {
     @Override
     public void manage(@NotNull Handler handler, @NotNull Context context, @NotNull Set<? extends RouteRole> routeRoles) throws Exception {
-        Optional<Person> optionalPerson = AuthRepository.getPersonBySessionId(context.req().getSession().getId());
+        if(context.req().getHeader("X-Auth-Token") == null){
+            if(routeRoles.contains(Role.ANYONE)){
+                handler.handle(context);
+            }
+            else{
+                context.status(401).result("Unauthorized");
+            }
+            return;
+        }
+        Optional<Person> optionalPerson = AuthRepository.getPersonBySessionId(context.req().getHeader("X-Auth-Token"));
         if(optionalPerson.isEmpty()){
             if(routeRoles.contains(Role.ANYONE)){
                 handler.handle(context);

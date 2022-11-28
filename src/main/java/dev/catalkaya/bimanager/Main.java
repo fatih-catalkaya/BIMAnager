@@ -6,9 +6,10 @@ import dev.catalkaya.bimanager.controller.*;
 import io.javalin.Javalin;
 
 public class Main {
-    public static void main(String[] args) {
+    private static Javalin app = createJavalinApp();
 
-        Javalin app = Javalin.create(config -> {
+    public static Javalin createJavalinApp() {
+        return Javalin.create(config -> {
                     config.accessManager(new AccessManager());
                     config.jetty.sessionHandler(SessionUtil::fileSessionHandler);
                 })
@@ -30,7 +31,10 @@ public class Main {
                 .get("/deposit/query", DepositController::query, Role.USER)
                 .delete("/deposit/delete", DepositController::delete, Role.ADMINISTRATOR)
                 .post("/auth", AuthController::auth, Role.ANYONE)
-                .get("/logout", AuthController::logout, Role.USER)
-            .start(8080);
+                .get("/logout", AuthController::logout, Role.USER);
+    }
+
+    public static void main(String[] args) {
+        app.start(8080);
     }
 }
