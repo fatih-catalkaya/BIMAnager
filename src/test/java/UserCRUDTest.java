@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserCRUDTest {
     private static final String DATABASE_FILE_PATH = "bimanager.sqlite";
-    private static final String SESSION_KEY = "test-session";
 
     @BeforeAll
     static void beforeAll() throws SQLException {
