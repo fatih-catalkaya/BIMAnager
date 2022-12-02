@@ -30,7 +30,7 @@ public class ProductRepository {
         StringBuilder sb = new StringBuilder("SELECT * FROM product");
         Connection con = Database.getInstance().getConnection();
         PreparedStatement ps;
-        if(product.getProductId() != null && !product.getProductName().isEmpty()){
+        if(product.getProductId() != null && !product.getProductId().isEmpty()){
             sb.append(" WHERE product_id = ?");
             ps = con.prepareStatement(sb.toString());
             ps.setString(1, product.getProductId());
