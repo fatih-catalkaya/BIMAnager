@@ -4,9 +4,10 @@ import dev.catalkaya.bimanager.auth.AccessManager;
 import dev.catalkaya.bimanager.auth.Role;
 import dev.catalkaya.bimanager.controller.*;
 import io.javalin.Javalin;
+import org.flywaydb.core.Flyway;
 
 public class Main {
-    private static Javalin app = createJavalinApp();
+    private static final Javalin JAVALIN_APP = createJavalinApp();
 
     public static Javalin createJavalinApp() {
         return Javalin.create(config -> {
@@ -35,6 +36,12 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        app.start(8080);
+        Flyway flyway = Flyway.configure()
+                .validateOnMigrate(true)
+                .dataSource("jdbc:sqlite:bimanager.sqlite", null, null)
+                .load();
+        flyway.migrate();
+
+        JAVALIN_APP.start(8080);
     }
 }

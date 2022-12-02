@@ -1,84 +1,84 @@
-import dev.catalkaya.bimanager.Main;
-import dev.catalkaya.bimanager.repository.AuthRepository;
-import io.javalin.Javalin;
-import io.javalin.http.HttpStatus;
+import dev.catalkaya.bimanager.model.Person;
+import dev.catalkaya.bimanager.repository.PersonRepository;
 import org.flywaydb.core.Flyway;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserCRUDTest {
     private static final String DATABASE_FILE_PATH = "bimanager.sqlite";
     private static final String SESSION_KEY = "test-session";
-    private static File dbFile;
-    private static Javalin app = null;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
-        dbFile = new File(DATABASE_FILE_PATH);
+        File dbFile = new File(DATABASE_FILE_PATH);
         if(dbFile.exists()){
             dbFile.delete();
         }
         Flyway flyway = Flyway.configure().dataSource("jdbc:sqlite:bimanager.sqlite", null, null).load();
         flyway.migrate();
-
-        AuthRepository.registerSessionId(SESSION_KEY, "admin@istrator.de");
-
-        app = Main.createJavalinApp();
-        app.start(9090);
-    }
-
-    @AfterAll
-    static void afterAll(){
-        app.stop();
     }
 
     @Test
     @DisplayName("Validates creation of a new user")
-    void createUser() throws URISyntaxException, IOException, InterruptedException {
-        final String reqBody = """
-        {
-            "person_name": "User",
-            "person_email": "user@user.de",
-            "person_password": "user123",
-            "person_is_administrator": false
-        }
-        """;
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .PUT(HttpRequest.BodyPublishers.ofString(reqBody))
-                .uri(new URI("http://127.0.0.1:9090/person/create"))
+    void createUser() throws SQLException, NoSuchAlgorithmException {
+        Person p = new Person.Builder()
+                .withPersonName("User")
+                .withPersonEmail("user@user.com")
+                .withPersonPassword("user123")
+                .withPersonIsAdministrator(false)
                 .build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        PersonRepository.create(p);
 
-        assertEquals(response.statusCode(), HttpStatus.OK.getCode());
-        assertEquals(response.body(), "OK");
+        assertTrue(StringUtils.isNotBlank(p.getPersonId()));
     }
 
     @Test
     @DisplayName("Validates reading the users")
-    void readUser() throws URISyntaxException, IOException, InterruptedException {
-        HttpClient httpClient = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .method("GET", HttpRequest.BodyPublishers.ofString("{}"))
-                .uri(new URI("http://127.0.0.1:9090/person/query"))
-                .header("X-Auth-Token", SESSION_KEY)
-                .build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    void readUser() throws SQLException {
+        // By default, administrator is created
+        List<Person> personList = PersonRepository.query(new Person.Builder().build());
+        assertFalse(personList.isEmpty());
 
-        assertEquals(response.statusCode(), HttpStatus.OK.getCode());
+        personList = PersonRepository.query(new Person.Builder().withPersonEmail("admin@istrator.de").build());
+        assertFalse(personList.isEmpty());
+
+        personList = PersonRepository.query(new Person.Builder()
+                .withPersonId("c893a566-4470-4e94-a6f3-607c16753c3a")
+                .build());
+        assertFalse(personList.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate update of a user")
+    void updateUser() throws SQLException, NoSuchAlgorithmException {
+        Person admin = new Person.Builder()
+                .withPersonId("c893a566-4470-4e94-a6f3-607c16753c3a")
+                .withPersonEmail("admin@istrator.com")
+                .build();
+        PersonRepository.update(admin);
+
+        List<Person> personList = PersonRepository.query(new Person.Builder()
+                .withPersonEmail("admin@istrator.com")
+                .build());
+        assertFalse(personList.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate deletion of a user")
+    void deleteUser() throws SQLException {
+        Person admin = new Person.Builder().withPersonId("c893a566-4470-4e94-a6f3-607c16753c3a").build();
+        PersonRepository.delete(admin);
+        List<Person> personList = PersonRepository.query(admin);
+        assertTrue(personList.isEmpty());
     }
 }
