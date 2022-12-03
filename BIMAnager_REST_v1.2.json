@@ -1,0 +1,1441 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "BIMAnager_REST",
+    "version": "1.2"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/v1"
+    }
+  ],
+  "paths": {
+    "/room/create": {
+      "put": {
+        "summary": "Create room",
+        "operationId": "put-room-create",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "room_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "room_name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "room_id",
+                    "room_name"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "room_name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "room_name"
+                ]
+              }
+            }
+          },
+          "description": ""
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/room/delete": {
+      "delete": {
+        "summary": "Delete room",
+        "operationId": "delete-room-delete",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "room_name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "room_name"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ],
+        "description": "A room can only be deleted if no person is assigned to the room."
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "in": "header",
+          "name": "X-Auth-Token",
+          "description": "Authentication Token"
+        }
+      ]
+    },
+    "/room/query": {
+      "get": {
+        "summary": "Query rooms",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "room_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "room_name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "room_name"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "operationId": "get-room-query",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ],
+        "description": "Returns all rooms.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "null"
+              },
+              "examples": {}
+            }
+          }
+        }
+      }
+    },
+    "/person/create": {
+      "put": {
+        "summary": "Create person",
+        "operationId": "put-person-create",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "person_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "person_name": {
+                      "type": "string"
+                    },
+                    "person_email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "person_is_administrator": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "person_id",
+                    "person_name",
+                    "person_email",
+                    "person_is_administrator"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "person_name": {
+                    "type": "string"
+                  },
+                  "person_email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "person_password": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "person_is_administrator": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "person_name",
+                  "person_email",
+                  "person_password",
+                  "person_is_administrator"
+                ]
+              },
+              "examples": {}
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/person/query": {
+      "get": {
+        "summary": "Query persons",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "person_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "person_name": {
+                      "type": "string"
+                    },
+                    "person_email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "person_room": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "person_is_administrator": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "person_id",
+                    "person_name",
+                    "person_email",
+                    "person_room",
+                    "person_is_administrator"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "operationId": "get-person",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "properties": {
+                      "person_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    },
+                    "required": [
+                      "person_id"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "person_email": {
+                        "type": "string",
+                        "format": "email"
+                      }
+                    },
+                    "required": [
+                      "person_email"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "room_name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "room_name"
+                    ]
+                  },
+                  {}
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "description": "Query persons by one of the person object attributes. If no field is set, all persons are returned."
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ],
+        "description": ""
+      },
+      "parameters": []
+    },
+    "/person/update": {
+      "post": {
+        "summary": "Update person",
+        "operationId": "post-person-update",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "person_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "person_name": {
+                    "type": "string"
+                  },
+                  "person_email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "person_password": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "person_room": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "person_is_administrator": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "person_id"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "description": ""
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/person/delete": {
+      "delete": {
+        "summary": "Delete person",
+        "operationId": "delete-person-delete",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "description": "Löscht eine Person und alle zu dieser Person hinterlegten Informationen (vergangene Käufe und Einzahlungen).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "person_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "person_id"
+                ]
+              }
+            }
+          },
+          "description": ""
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/product/create": {
+      "put": {
+        "summary": "Create person",
+        "operationId": "put-produkt-create",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product_id": {
+                      "type": "string"
+                    },
+                    "product_name": {
+                      "type": "string"
+                    },
+                    "product_price": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "product_id",
+                    "product_name",
+                    "product_price"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "product_price": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "product_name",
+                  "product_price"
+                ]
+              }
+            }
+          },
+          "description": ""
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/product/update": {
+      "post": {
+        "summary": "Update Product",
+        "operationId": "post-product-update",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "product_id": {
+                      "type": "string"
+                    },
+                    "product_name": {
+                      "type": "string"
+                    },
+                    "product_price": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "product_price": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "product_id"
+                ]
+              }
+            }
+          },
+          "description": ""
+        },
+        "description": "",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/product/delete": {
+      "delete": {
+        "summary": "Delete Product",
+        "operationId": "delete-product-delete",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "product_id"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "/product/query": {
+      "get": {
+        "summary": "Query product",
+        "operationId": "get-product-query",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "properties": {
+                      "product_id": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    },
+                    "required": [
+                      "product_id"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "product_name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "product_name"
+                    ]
+                  },
+                  {}
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "description": "If the body is empty, all products are returned as an array. Otherwise only a single object is returned."
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "product_name": {
+                            "type": "string"
+                          },
+                          "product_price": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "product_id",
+                          "product_name",
+                          "product_price"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "product_id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "product_name": {
+                          "type": "string"
+                        },
+                        "product_price": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "product_id",
+                        "product_name",
+                        "product_price"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "description": "Empty body is returned, when request body was not empty and no matching product was found."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "parameters": []
+    },
+    "/purchase/create": {
+      "put": {
+        "summary": "Create purchase",
+        "operationId": "put-purchase-create",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "person_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "purchase_product_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "purchase_datetime": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "purchase_amount": {
+                      "type": "number",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "person_id",
+                    "purchase_product_id",
+                    "purchase_datetime",
+                    "purchase_amount"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/purchase/delete": {
+      "delete": {
+        "summary": "Delete Purchase",
+        "operationId": "delete-purchase-delete",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "purchase_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "purchase_id"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/purchase/query": {
+      "get": {
+        "summary": "Query Purchases",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "purchase_id": {
+                        "type": "string"
+                      },
+                      "purchase_product_name": {
+                        "type": "string"
+                      },
+                      "purchase_product_price": {
+                        "type": "string"
+                      },
+                      "purchase_product_amount": {
+                        "type": "string"
+                      },
+                      "purchase_product_datetime": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "purchase_id",
+                      "purchase_product_name",
+                      "purchase_product_price",
+                      "purchase_product_amount",
+                      "purchase_product_datetime"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "operationId": "get-purchase-query",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "person_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "purchase_after": {
+                    "type": "string",
+                    "description": "Optional field. If set, then only purchases after the given datetime are returned."
+                  }
+                },
+                "required": [
+                  "person_id"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/deposit/create": {
+      "put": {
+        "summary": "Create Deposit",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deposit_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "person_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "deposit_datetime": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "deposit_amount": {
+                      "type": "number"
+                    },
+                    "deposit_method": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "deposit_id",
+                    "person_id",
+                    "deposit_datetime",
+                    "deposit_amount",
+                    "deposit_method"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "operationId": "put-deposit-create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "person_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "deposit_datetime": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "deposit_amount": {
+                    "type": "number"
+                  },
+                  "deposit_method": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "person_id",
+                  "deposit_datetime",
+                  "deposit_amount",
+                  "deposit_method"
+                ]
+              }
+            }
+          }
+        },
+        "description": "",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/deposit/delete": {
+      "delete": {
+        "summary": "Delete Deposit",
+        "operationId": "delete-deposit-delete",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deposit_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "deposit_id"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/deposit/query": {
+      "get": {
+        "summary": "Query Deposits",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "person_id": {
+                        "type": "string"
+                      },
+                      "deposit_id": {
+                        "type": "string"
+                      },
+                      "deposit_datetime": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "deposit_amount": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "person_id",
+                      "deposit_id",
+                      "deposit_datetime",
+                      "deposit_amount"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "operationId": "get-deposit-query",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "person_id": {
+                    "type": "string"
+                  },
+                  "deposit_after": {
+                    "type": "string",
+                    "description": "Optional: if set, only deposits after the given date are returned",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "person_id"
+                ]
+              }
+            }
+          },
+          "description": ""
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "X-Auth-Token",
+            "description": "Authentication Token",
+            "required": true
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/auth": {
+      "post": {
+        "summary": "Acquire authentication token",
+        "operationId": "post-auth",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "auth_token"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "person_email": {
+                    "type": "string"
+                  },
+                  "person_password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "person_email",
+                  "person_password"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Room": {
+        "title": "Room",
+        "type": "object",
+        "examples": [],
+        "properties": {
+          "room_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "room_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "room_id",
+          "room_name"
+        ]
+      },
+      "Person": {
+        "title": "Person",
+        "type": "object",
+        "description": "",
+        "properties": {
+          "person_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "person_name": {
+            "type": "string"
+          },
+          "person_email": {
+            "type": "string",
+            "format": "email"
+          },
+          "person_passwort": {
+            "type": "string",
+            "format": "password"
+          },
+          "person_room_name": {
+            "type": "string"
+          },
+          "person_is_administrator": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "person_id",
+          "person_name",
+          "person_email",
+          "person_passwort",
+          "person_room_name",
+          "person_is_administrator"
+        ]
+      },
+      "Product": {
+        "title": "Product",
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "product_price": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "product_id",
+          "product_name",
+          "product_price"
+        ]
+      },
+      "Purchase": {
+        "title": "Purchase",
+        "type": "object",
+        "properties": {
+          "purchase_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "person_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "purchase_datetime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "purchase_product_name": {
+            "type": "string"
+          },
+          "purchase_product_price": {
+            "type": "number"
+          },
+          "purchase_product_amount": {
+            "type": "number",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "purchase_id",
+          "purchase_datetime",
+          "purchase_product_name",
+          "purchase_product_price",
+          "purchase_product_amount"
+        ],
+        "description": ""
+      },
+      "Deposit": {
+        "title": "Deposit",
+        "type": "object",
+        "properties": {
+          "deposit_id": {
+            "type": "string"
+          },
+          "deposit_amount": {
+            "type": "number"
+          },
+          "deposit_datetime": {
+            "type": "string"
+          },
+          "deposit_method": {
+            "type": "string",
+            "description": "Cash, Bank transfer, Paypal, Shitcoin"
+          }
+        },
+        "required": [
+          "deposit_id",
+          "deposit_amount",
+          "deposit_datetime",
+          "deposit_method"
+        ]
+      }
+    },
+    "securitySchemes": {}
+  }
+}
