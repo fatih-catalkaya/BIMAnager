@@ -53,6 +53,7 @@ public class PurchaseCRUDTest {
                 .withPurchaseDatetime(LocalDateTime.now())
                 .build();
         PurchaseRepository.create(new Purchase[]{p});
+        assertFalse(p.getPurchaseId().isEmpty());
     }
 
     @Test
